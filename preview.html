@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRAND CITY — Open World</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@400;700;900&display=swap');
+
+:root{
+  --pink:#ff2b82; --yellow:#ffd43b; --cyan:#25e7ff; --dark:#08070d;
+  --glass:rgba(12,10,19,.62);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--dark);color:#fff;
+  font-family:"Noto Sans TC",sans-serif;overflow-x:hidden;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:20;
+  background:linear-gradient(rgba(255,255,255,.018) 50%,transparent 50%);
+  background-size:100% 4px;mix-blend-mode:overlay;opacity:.25;
+}
+a{color:inherit;text-decoration:none}
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:30;
+  height:76px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;
+  background:linear-gradient(180deg,rgba(4,3,8,.88),transparent);
+  backdrop-filter:blur(8px);
+}
+.logo{font-family:"Bebas Neue";font-size:34px;letter-spacing:3px;line-height:.8}
+.logo b{color:var(--pink);font-size:18px;display:block;letter-spacing:5px}
+.navlinks{display:flex;gap:30px;font-size:12px;font-weight:900;letter-spacing:2px}
+.navlinks a{opacity:.72;transition:.2s}.navlinks a:hover{opacity:1;color:var(--yellow)}
+.menu{display:none;border:1px solid #fff5;background:none;color:white;padding:9px}
+
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;display:grid;align-items:end;
+  padding:0 7vw 9vh;
+  background:
+    radial-gradient(circle at 70% 24%,#ff2b8240,transparent 25%),
+    linear-gradient(180deg,#15102b 0%,#17102c 40%,#08070d 100%);
+}
+.city{position:absolute;inset:0;overflow:hidden}
+.skyline{
+  position:absolute;bottom:0;left:-5%;width:110%;height:47%;
+  background:
+    linear-gradient(90deg,transparent 0 3%,#16131f 3% 8%,transparent 8% 10%,#20182a 10% 15%,transparent 15% 17%,#11101a 17% 22%,transparent 22% 25%,#211725 25% 31%,transparent 31% 34%,#14121c 34% 41%,transparent 41% 44%,#211728 44% 51%,transparent 51% 55%,#12111b 55% 61%,transparent 61% 65%,#24192a 65% 71%,transparent 71% 75%,#15131d 75% 82%,transparent 82% 85%,#24182a 85% 91%,transparent 91%);
+  clip-path:polygon(0 35%,3% 35%,3% 15%,8% 15%,8% 40%,10% 40%,10% 5%,15% 5%,15% 45%,18% 45%,18% 23%,23% 23%,23% 48%,26% 48%,26% 8%,31% 8%,31% 38%,34% 38%,34% 17%,40% 17%,40% 44%,44% 44%,44% 2%,50% 2%,50% 39%,55% 39%,55% 13%,60% 13%,60% 42%,64% 42%,64% 7%,70% 7%,70% 43%,75% 43%,75% 18%,81% 18%,81% 41%,85% 41%,85% 10%,91% 10%,91% 45%,100% 45%,100% 100%,0 100%);
+  opacity:.9;
+}
+.windows{
+  position:absolute;inset:30% 0 0;
+  background-image:
+    linear-gradient(90deg,transparent 0 49%,#ffd43b55 49% 50%,transparent 50% 100%),
+    linear-gradient(#ff2b8240 1px,transparent 1px);
+  background-size:120px 100%,100% 17px;
+  mask-image:linear-gradient(to bottom,transparent,#000 30%);
+  opacity:.35;
+}
+.sun{
+  position:absolute;width:380px;height:380px;border-radius:50%;
+  right:12%;top:12%;background:linear-gradient(145deg,#ffe15b,#ff4d72);
+  box-shadow:0 0 100px #ff397d80;opacity:.9;
+}
+.palm{position:absolute;bottom:5%;right:10%;width:5px;height:48%;background:#151018;transform:rotate(7deg)}
+.palm:before{
+  content:"";position:absolute;top:0;left:-115px;width:240px;height:150px;
+  background:repeating-conic-gradient(from 10deg,#111 0 7deg,transparent 7deg 23deg);
+  clip-path:ellipse(50% 45% at 50% 30%);
+}
+.hero-copy{position:relative;z-index:4;max-width:950px}
+.kicker{
+  display:inline-flex;gap:10px;align-items:center;color:var(--yellow);
+  font-size:12px;font-weight:900;letter-spacing:4px;margin-bottom:10px
+}
+.kicker i{width:32px;height:2px;background:var(--yellow)}
+h1{
+  margin:0;font-family:"Bebas Neue";font-size:clamp(110px,18vw,270px);
+  line-height:.72;letter-spacing:-3px;text-transform:uppercase;
+  text-shadow:9px 10px 0 #000,18px 18px 0 rgba(255,43,130,.42);
+}
+h1 span{display:block;color:transparent;-webkit-text-stroke:2px #fff;transform:translateX(5vw)}
+.tagline{font-size:clamp(17px,2vw,25px);font-weight:900;margin:38px 0 26px;max-width:620px}
+.tagline em{color:var(--pink);font-style:normal}
+.cta{
+  display:inline-flex;align-items:center;gap:16px;background:var(--yellow);color:#08070d;
+  padding:16px 25px;font-weight:900;letter-spacing:1px;box-shadow:8px 8px 0 var(--pink);
+  transition:.25s;cursor:pointer
+}
+.cta:hover{transform:translate(4px,4px);box-shadow:4px 4px 0 var(--pink)}
+.stamp{
+  position:absolute;right:6vw;bottom:8vh;z-index:5;width:135px;height:135px;border:2px solid #fff;
+  border-radius:50%;display:grid;place-items:center;transform:rotate(14deg);font-size:12px;
+  text-align:center;letter-spacing:2px;background:#0005;backdrop-filter:blur(5px)
+}
+.stamp strong{font-family:"Bebas Neue";font-size:34px;display:block;color:var(--cyan)}
+
+.ticker{background:var(--pink);color:#09070c;overflow:hidden;white-space:nowrap;font-family:"Bebas Neue";font-size:25px;letter-spacing:2px}
+.ticker div{display:inline-block;padding:11px 0;animation:marquee 20s linear infinite}
+.ticker span{margin:0 28px}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+section{padding:120px 7vw;position:relative}
+.section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:45px}
+.eyebrow{font-size:11px;color:var(--cyan);letter-spacing:4px;font-weight:900}
+h2{font-family:"Bebas Neue";font-size:76px;line-height:.85;margin:10px 0 0}
+.section-head p{max-width:350px;color:#aaa;font-size:14px;line-height:1.8}
+
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{height:510px;position:relative;overflow:hidden;background:#15121d;border:1px solid #fff2}
+.card:after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 35%,#08070de8)}
+.card:nth-child(1){background:linear-gradient(145deg,#442045,#f05078 55%,#f8c04e)}
+.card:nth-child(2){background:linear-gradient(145deg,#071c2c,#117a92 50%,#f7c43d)}
+.card:nth-child(3){background:linear-gradient(145deg,#251327,#9e265e 50%,#ff9d3b)}
+.card-art{position:absolute;inset:0}
+.card-art:before{
+  content:"";position:absolute;width:230px;height:130px;border-radius:50% 45% 18% 18%;
+  background:#111;left:50%;top:40%;transform:translate(-50%,-50%) skew(-12deg);
+  box-shadow:0 34px 0 -18px #07060a, inset 0 -14px 0 #ffcf4a;
+}
+.card:nth-child(2) .card-art:before{transform:translate(-50%,-50%) skew(8deg);background:#171820;box-shadow:inset 0 -12px 0 #25e7ff}
+.card:nth-child(3) .card-art:before{transform:translate(-50%,-50%) skew(-5deg);background:#07070b;box-shadow:inset 0 -11px 0 #ff2b82}
+.card-art:after{
+  content:"";position:absolute;left:calc(50% - 100px);top:calc(40% - 25px);width:200px;height:28px;
+  border-radius:50%;background:linear-gradient(90deg,transparent 5%,#b8eaff 20% 42%,transparent 43% 57%,#b8eaff 58% 80%,transparent 95%);
+  opacity:.8
+}
+.card-info{position:absolute;z-index:2;bottom:24px;left:26px;right:26px}
+.card-info small{color:var(--yellow);font-weight:900;letter-spacing:3px}
+.card-info h3{font-family:"Bebas Neue";font-size:48px;margin:6px 0}
+.card-info p{font-size:12px;color:#ddd;line-height:1.6}
+
+.split{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:center}
+.poster{
+  min-height:570px;position:relative;overflow:hidden;
+  background:linear-gradient(145deg,#151323,#351535 48%,#f04d76 49%,#ffcf42);
+  box-shadow:22px 22px 0 var(--cyan);
+}
+.poster:before{
+  content:"";position:absolute;width:360px;height:460px;left:50%;top:53%;
+  transform:translate(-50%,-50%);
+  background:
+    radial-gradient(circle at 50% 23%,#18151c 0 42px,transparent 43px),
+    linear-gradient(105deg,transparent 37%,#17141a 38% 65%,transparent 66%),
+    linear-gradient(75deg,transparent 35%,#222 36% 62%,transparent 63%);
+  filter:drop-shadow(20px 20px 0 #ff2b8266);
+}
+.poster:after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg,transparent 0 35px,#fff1 36px 38px);
+}
+.poster-title{position:absolute;z-index:3;left:28px;top:25px;font-family:"Bebas Neue";font-size:90px;line-height:.72;text-shadow:6px 6px #000}
+.poster-title span{color:var(--yellow)}
+.copy h2{font-size:100px}.copy p{color:#aaa;line-height:2;font-size:15px;max-width:560px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:40px 0}
+.stat{border-top:2px solid var(--pink);padding-top:14px}
+.stat strong{font-family:"Bebas Neue";font-size:45px}.stat small{display:block;color:#888;font-size:10px;letter-spacing:2px}
+
+.footer{
+  min-height:55vh;background:#09080d;padding:90px 7vw 35px;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between
+}
+.footer:before{content:"GTA";position:absolute;right:-3vw;bottom:-13vw;font-family:"Bebas Neue";font-size:45vw;line-height:.7;color:#fff03;pointer-events:none}
+.footer h2{font-size:clamp(80px,14vw,190px);max-width:900px}
+.footer-bottom{display:flex;justify-content:space-between;border-top:1px solid #fff2;padding-top:18px;color:#666;font-size:10px;letter-spacing:2px}
+.cursor{position:fixed;width:18px;height:18px;border:2px solid var(--yellow);border-radius:50%;pointer-events:none;z-index:100;transform:translate(-50%,-50%);mix-blend-mode:difference}
+@media(max-width:800px){
+  .navlinks{display:none}.menu{display:block}
+  .hero{padding:0 7vw 70px}.sun{right:-90px;top:18%;width:280px;height:280px}
+  h1{font-size:30vw}.stamp{display:none}
+  section{padding:80px 7vw}.section-head,.split{display:block}
+  .section-head p{margin-top:25px}.cards{grid-template-columns:1fr}.card{height:430px;margin-bottom:16px}
+  .poster{min-height:480px;margin-bottom:70px}.copy h2{font-size:70px}
+  .footer-bottom{gap:20px;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="cursor"></div>
+
+<nav>
+  <a class="logo" href="#">GRAND CITY <b>OPEN WORLD</b></a>
+  <div class="navlinks">
+    <a href="#world">WORLD</a><a href="#rides">RIDES</a><a href="#story">STORY</a><a href="#enter">ENTER</a>
+  </div>
+  <button class="menu">MENU</button>
+</nav>
+
+<header class="hero" id="top">
+  <div class="city">
+    <div class="sun"></div><div class="skyline"></div><div class="windows"></div><div class="palm"></div>
+  </div>
+  <div class="hero-copy">
+    <div class="kicker"><i></i>WELCOME TO THE CITY</div>
+    <h1>Grand<span>City</span></h1>
+    <div class="tagline">沒有規則的城市，只有你的<span style="color:var(--yellow)">下一個選擇。</span><br>Drive fast. <em>Live loud.</em> Leave a legend.</div>
+    <a class="cta" href="#world">ENTER THE CITY <span>↗</span></a>
+  </div>
+  <div class="stamp"><div><strong>18+</strong>OPEN WORLD<br>AFTER DARK</div></div>
+</header>
+
+<div class="ticker"><div>
+  <span>★ GRAND CITY</span><span>★ NO RULES</span><span>★ ONE CITY</span><span>★ YOUR STORY</span><span>★ GRAND CITY</span><span>★ NO RULES</span><span>★ ONE CITY</span><span>★ YOUR STORY</span>
+</div></div>
+
+<section id="world">
+  <div class="section-head">
+    <div><div class="eyebrow">01 / THE PLAYGROUND</div><h2>YOUR CITY.<br>YOUR RULES.</h2></div>
+    <p>一座從日落一路燃燒到凌晨的開放世界。海岸、公路、霓虹街區與高聳天際線，全都等著你留下痕跡。</p>
+  </div>
+  <div class="cards" id="rides">
+    <article class="card"><div class="card-art"></div><div class="card-info"><small>01 / NIGHT DRIVE</small><h3>NEON BOULEVARD</h3><p>霓虹、速度與城市的另一面。今晚，沒有人會問你從哪裡來。</p></div></article>
+    <article class="card"><div class="card-art"></div><div class="card-info"><small>02 / COASTLINE</small><h3>VICE COAST</h3><p>沿著海岸線全速前進，讓夕陽和尾燈一起消失在後視鏡。</p></div></article>
+    <article class="card"><div class="card-art"></div><div class="card-info"><small>03 / AFTER DARK</small><h3>THE UNDERGROUND</h3><p>真正的城市生活，從午夜才開始。音樂、街頭與不眠的引擎聲。</p></div></article>
+  </div>
+</section>
+
+<section id="story">
+  <div class="split">
+    <div class="poster"><div class="poster-title">LIVE<br><span>LOUD</span></div></div>
+    <div class="copy">
+      <div class="eyebrow">02 / THE LIFE</div>
+      <h2>MAKE<br>NOISE.</h2>
+      <p>你不是來參觀這座城市。你來，是為了改變它。</p>
+      <p>從第一台車、第一筆交易，到城市最高處的夜景，每一次選擇都會把故事推向不同方向。這裡沒有固定的主角——<b>你就是主角。</b></p>
+      <div class="stats">
+        <div class="stat"><strong>01</strong><small>CITY</small></div>
+        <div class="stat"><strong>∞</strong><small>POSSIBILITIES</small></div>
+        <div class="stat"><strong>24/7</strong><small>AFTER DARK</small></div>
+      </div>
+      <a class="cta" href="#enter">START YOUR STORY <span>→</span></a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" id="enter">
+  <div>
+    <div class="eyebrow">03 / YOUR TURN</div>
+    <h2>THE CITY<br>IS YOURS.</h2>
+    <a class="cta" href="#top">REPLAY THE TRAILER ↗</a>
+  </div>
+  <div class="footer-bottom"><span>GRAND CITY — FAN CONCEPT</span><span>BUILT FOR THE WEB / 2026</span></div>
+</footer>
+
+<script>
+const cursor=document.querySelector('.cursor');
+window.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';
+  const x=(e.clientX/innerWidth-.5), y=(e.clientY/innerHeight-.5);
+  document.querySelector('.sun').style.transform=`translate(${x*18}px,${y*12}px)`;
+});
+document.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{
+  document.body.animate([{filter:'brightness(1)'},{filter:'brightness(1.35)'},{filter:'brightness(1)'}],{duration:350});
+}));
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{
+  if(e.isIntersecting)e.target.animate([{opacity:0,transform:'translateY(35px)'},{opacity:1,transform:'translateY(0)'}],{duration:700,easing:'cubic-bezier(.2,.8,.2,1)',fill:'forwards'})
+}),{threshold:.12});
+document.querySelectorAll('section,.card').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
